@@ -13,6 +13,9 @@ import ThumbDown from '@material-ui/icons/ThumbDown';
 import ThumbUp from '@material-ui/icons/ThumbUp';
 import Typography from '@material-ui/core/Typography';
 import ReciteContainer from './ReciteContainer'
+import SettingContainer from './SettingContainer'
+import VocabContainer from './VocabContainer'
+import Grid from '@material-ui/core/Grid';
 
 function TabContainer(props) {
     return (
@@ -32,6 +35,11 @@ const styles = theme => ({
         width: '100%',
         backgroundColor: theme.palette.background.paper,
     },
+
+    tabs: {
+        flexGrow: 1,
+        width: '100%',
+    }
 });
 
 class ScrollableTabs extends React.Component {
@@ -49,31 +57,33 @@ class ScrollableTabs extends React.Component {
 
         return (
             <div className={classes.root}>
-                <AppBar position="static" color="default" className={classes.tabs}>
-                    <Tabs
-                        value={value}
-                        onChange={this.handleChange}
-                        scrollable
-                        scrollButtons="on"
-                        indicatorColor="primary"
-                        textColor="primary"
-                    >
-                        <Tab label="Item One" icon={<PhoneIcon />} />
-                        <Tab label="Item Two" icon={<FavoriteIcon />} />
-                        <Tab label="Item Three" icon={<PersonPinIcon />} />
-                        <Tab label="Item Four" icon={<HelpIcon />} />
-                        <Tab label="Item Five" icon={<ShoppingBasket />} />
-                        <Tab label="Item Six" icon={<ThumbDown />} />
-                        <Tab label="Item Seven" icon={<ThumbUp />} />
-                    </Tabs>
-                </AppBar>
-                {value === 0 && <ReciteContainer/>}
-                {value === 1 && <TabContainer>Item Two</TabContainer>}
-                {value === 2 && <TabContainer>Item Three</TabContainer>}
-                {value === 3 && <TabContainer>Item Four</TabContainer>}
-                {value === 4 && <TabContainer>Item Five</TabContainer>}
-                {value === 5 && <TabContainer>Item Six</TabContainer>}
-                {value === 6 && <TabContainer>Item Seven</TabContainer>}
+                <Grid direction={'column'} container  alignment={'center'} justify={'center'}>
+                    <Grid item>
+                        <AppBar position="static" color="default" className={classes.tabs}>
+                            <Tabs
+                                value={value}
+                                onChange={this.handleChange}
+                                scrollable
+                                scrollButtons="on"
+                                indicatorColor="primary"
+                                textColor="primary"
+                            >
+                                <Tab label="单词学习" icon={<PhoneIcon />} />
+                                <Tab label="单词考核" icon={<FavoriteIcon />} />
+                                <Tab label="我的词库" icon={<PersonPinIcon />} />
+                                <Tab label="单词进度" icon={<ThumbDown />} />
+                                <Tab label="单词设置" icon={<ThumbUp />} />
+                            </Tabs>
+                        </AppBar>
+                    </Grid>
+                    <Grid item>
+                        {value === 0 && <ReciteContainer/>}
+                        {value === 1 && <TabContainer>Item Two</TabContainer>}
+                        {value === 2 && <VocabContainer/>}
+                        {value === 3 && <TabContainer>Item Four</TabContainer>}
+                        {value === 4 && <SettingContainer/>}
+                    </Grid>
+                </Grid>
             </div>
         );
     }

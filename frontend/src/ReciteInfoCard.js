@@ -11,28 +11,18 @@ import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
     root: {
-        flexGrow: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
         marginTop: theme.spacing.unit * 4,
-        marginLeft: theme.spacing.unit * 36,
-        marginRight: theme.spacing.unit * 36,
         marginBottom: theme.spacing.unit * 4,
-        paddingBottom: theme.spacing.unit * 2,
-        paddingTop: theme.spacing.unit * 2,
-        height: '100%',
-        width: '60%'
+        marginLeft: theme.spacing.unit * 20,
+        marginRight: theme.spacing.unit * 20,
     },
     container: {
         padding: theme.spacing.unit * 5,
     },
-    item1: {
-        paddingLeft: theme.spacing.unit * 6,
-    },
-    item2: {
-        paddingLeft: theme.spacing.unit * 2,
-    },
-    item3: {
-        paddingLeft: theme.spacing.unit * 12,
-    },
+
     button: {
         background: 'linear-gradient(45deg, #2196F3 30%, #64B5F6 90%)',
         borderRadius: 5,
@@ -58,7 +48,7 @@ class ReciteInfoCard extends Component{
             <div>
                 <Paper className={classes.root}>
                     <Grid container alignItems='center' jusitfy='center' className={classes.container}>
-                        <Grid item xs={3} className={classes.item1}>
+                        <Grid item xs={3}>
                             <div>
                                 <Typography variant="display3" className={classes.text1}>
                                     150
@@ -68,7 +58,7 @@ class ReciteInfoCard extends Component{
                                 </Typography>
                             </div>
                         </Grid>
-                        <Grid item xs={3} className={classes.item2}>
+                        <Grid item xs={3}>
                             <Typography variant="display3" className={classes.text1}>
                                 0
                             </Typography>
@@ -76,7 +66,7 @@ class ReciteInfoCard extends Component{
                                 新词
                             </Typography>
                         </Grid>
-                        <Grid item xs={3} className={classes.item3}>
+                        <Grid item xs={6}>
                             <Button variant="raised" color="primary" size="large" className={classes.button}>
                                 <Typography variant="title" className={classes.text2}>
                                     开始学习

@@ -52,7 +52,7 @@ class TopAppBar extends Component {
     }
 }
 
-AppBar.propTypes = {
+TopAppBar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 

@@ -4,12 +4,12 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ReciteInfoCard from './ReciteInfoCard'
+import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
     root: theme.mixins.gutters({
         paddingTop: theme.spacing.unit * 8,
         paddingBottom: theme.spacing.unit * 8,
-        marginTop: theme.spacing.unit * 1,
         width: '100%',
     }),
     bullet: {
@@ -26,18 +26,30 @@ const styles = theme => ({
 
 function ReciteContainer(props) {
     const { classes } = props;
+    const reciting = false;
     const bull = <span className={classes.bullet}>•</span>;
     return (
         <div>
-            <Paper className={classes.root} elevation={4}>
-                <Typography variant="display1" component="h3" className={classes.head}>
-                    {bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}
-                    单词背诵
-                    {bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}
-                </Typography>
-                <Typography variant="headline" component="h3" className={classes.head}>
-                    <ReciteInfoCard/>
-                </Typography>
+            <Paper elevation={4}>
+                <Grid container direction={'column'} alignment={'center'} justify={'center'}
+                      className={classes.root} >
+                    {
+                        !reciting && <Grid item>
+                            <Typography variant="display1" component="h3" className={classes.head}>
+                                {bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}
+                                单词背诵
+                                {bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}
+                            </Typography>
+                        </Grid>
+                    }
+                    {
+                        !reciting && <Grid item>
+                            <Typography variant="headline" component="h3" className={classes.head}>
+                                <ReciteInfoCard/>
+                            </Typography>
+                        </Grid>
+                    }
+                </Grid>
             </Paper>
         </div>
     );
