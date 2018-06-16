@@ -56,34 +56,36 @@ class ScrollableTabs extends React.Component {
         const { value } = this.state;
 
         return (
-            <div className={classes.root}>
-                <Grid direction={'column'} container  alignment={'center'} justify={'center'}>
-                    <Grid item>
-                        <AppBar position="static" color="default" className={classes.tabs}>
-                            <Tabs
-                                value={value}
-                                onChange={this.handleChange}
-                                scrollable
-                                scrollButtons="on"
-                                indicatorColor="primary"
-                                textColor="primary"
-                            >
-                                <Tab label="单词学习" icon={<PhoneIcon />} />
-                                <Tab label="单词考核" icon={<FavoriteIcon />} />
-                                <Tab label="我的词库" icon={<PersonPinIcon />} />
-                                <Tab label="单词进度" icon={<ThumbDown />} />
-                                <Tab label="单词设置" icon={<ThumbUp />} />
-                            </Tabs>
-                        </AppBar>
+            <div style={{ paddingTop: 70 }}>
+                <div className={classes.root}>
+                    <Grid direction={'column'} container  alignment={'center'} justify={'center'}>
+                        <Grid item>
+                            <AppBar position="static" color="default" className={classes.tabs}>
+                                <Tabs
+                                    value={value}
+                                    onChange={this.handleChange}
+                                    scrollable
+                                    scrollButtons="on"
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                >
+                                    <Tab label="单词学习" icon={<PhoneIcon />} />
+                                    <Tab label="单词考核" icon={<FavoriteIcon />} />
+                                    <Tab label="我的词库" icon={<PersonPinIcon />} />
+                                    <Tab label="单词进度" icon={<ThumbDown />} />
+                                    <Tab label="单词设置" icon={<ThumbUp />} />
+                                </Tabs>
+                            </AppBar>
+                        </Grid>
+                        <Grid item>
+                            {value === 0 && <ReciteContainer/>}
+                            {value === 1 && <TabContainer>Item Two</TabContainer>}
+                            {value === 2 && <VocabContainer/>}
+                            {value === 3 && <TabContainer>Item Four</TabContainer>}
+                            {value === 4 && <SettingContainer/>}
+                        </Grid>
                     </Grid>
-                    <Grid item>
-                        {value === 0 && <ReciteContainer/>}
-                        {value === 1 && <TabContainer>Item Two</TabContainer>}
-                        {value === 2 && <VocabContainer/>}
-                        {value === 3 && <TabContainer>Item Four</TabContainer>}
-                        {value === 4 && <SettingContainer/>}
-                    </Grid>
-                </Grid>
+                </div>
             </div>
         );
     }

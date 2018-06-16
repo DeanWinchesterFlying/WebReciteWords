@@ -12,6 +12,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
 const styles = theme => ({
     bootstrapRoot: {
@@ -120,6 +121,14 @@ class SettingContainer extends React.Component {
                 <form className={classes.container} noValidate autoComplete="off">
                     <Grid container direction={'column'} justify={'center'} className={classes.root}
                           alignment={'flex-start'} spacing={8}>
+                        <Grid item>
+                            <Typography>
+                                背单词设置
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            <Divider inset/>
+                        </Grid>
                         <Grid item>
                             <TextField
                                 id="select-vocabulary"

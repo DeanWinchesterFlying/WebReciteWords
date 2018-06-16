@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ReciteInfoCard from './ReciteInfoCard'
 import Grid from '@material-ui/core/Grid';
+import RectieCard from './ReciteCard'
 
 const styles = theme => ({
     root: theme.mixins.gutters({
@@ -24,35 +25,44 @@ const styles = theme => ({
     }),
 });
 
-function ReciteContainer(props) {
-    const { classes } = props;
-    const reciting = false;
-    const bull = <span className={classes.bullet}>•</span>;
-    return (
-        <div>
-            <Paper elevation={4}>
-                <Grid container direction={'column'} alignment={'center'} justify={'center'}
-                      className={classes.root} >
-                    {
-                        !reciting && <Grid item>
-                            <Typography variant="display1" component="h3" className={classes.head}>
-                                {bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}
-                                单词背诵
-                                {bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}
-                            </Typography>
-                        </Grid>
-                    }
-                    {
-                        !reciting && <Grid item>
-                            <Typography variant="headline" component="h3" className={classes.head}>
-                                <ReciteInfoCard/>
-                            </Typography>
-                        </Grid>
-                    }
-                </Grid>
-            </Paper>
-        </div>
-    );
+class ReciteContainer extends React.Component{
+    state = { reciting: false };
+
+    render() {
+        const { classes } = this.props;
+        const reciting = this.state.reciting;
+        const bull = <span className={classes.bullet}>•</span>;
+        return (
+            <div>
+                <Paper elevation={4}>
+                    <Grid container direction={'column'} alignment={'center'} justify={'center'}
+                          className={classes.root} >
+                        {
+                            !reciting && <Grid item>
+                                <Typography variant="display1" component="h3" className={classes.head}>
+                                    {bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}
+                                    单词背诵
+                                    {bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}{bull}
+                                </Typography>
+                            </Grid>
+                        }
+                        {
+                            !reciting && <Grid item>
+                                <Typography variant="headline" component="h3" className={classes.head}>
+                                    <ReciteInfoCard onLearn={() => this.setState({reciting: !reciting})}/>
+                                </Typography>
+                            </Grid>
+                        }
+                        {
+                            reciting && <Grid item>
+                                <RectieCard/>
+                            </Grid>
+                        }
+                    </Grid>
+                </Paper>
+            </div>
+        );
+    }
 }
 
 ReciteContainer.propTypes = {

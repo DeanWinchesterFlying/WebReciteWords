@@ -67,7 +67,8 @@ class ReciteInfoCard extends Component{
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Button variant="raised" color="primary" size="large" className={classes.button}>
+                            <Button variant="raised" color="primary" size="large" className={classes.button}
+                                onClick={this.props.onLearn}>
                                 <Typography variant="title" className={classes.text2}>
                                     开始学习
                                 </Typography>
