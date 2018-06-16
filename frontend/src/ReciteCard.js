@@ -14,6 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import CheckCircle from '@material-ui/icons/CheckCircle';
+import RemoveCircle from '@material-ui/icons/RemoveCircle';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
@@ -75,12 +77,12 @@ class ReciteCard extends React.Component{
                     />
                     <CardContent>
                         <Button variant="outlined" size="large" color="primary" className={classes.button}>
-                            <FileUpload className={classes.leftIcon} />
+                            <CheckCircle className={classes.leftIcon} />
                             认识
                         </Button>
                         <br/>
                         <Button variant="outlined" size="large" color="primary" className={classes.button}>
-                            <FileUpload className={classes.leftIcon} />
+                            <RemoveCircle className={classes.leftIcon} />
                             不认识
                         </Button>
                     </CardContent>

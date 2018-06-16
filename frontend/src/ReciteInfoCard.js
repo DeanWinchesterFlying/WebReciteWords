@@ -60,7 +60,7 @@ class ReciteInfoCard extends Component{
                         </Grid>
                         <Grid item xs={3}>
                             <Typography variant="display3" className={classes.text1}>
-                                0
+                                150
                             </Typography>
                             <Typography variant="title">
                                 新词
