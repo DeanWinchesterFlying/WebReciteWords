@@ -7,6 +7,12 @@ import LoginCard from './LoginCard'
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 class App extends Component {
+
+    constructor(props) {
+        super(props);
+        localStorage.setItem('prefix', 'http://localhost:8000/api')
+    }
+
     state = {
         auth: false,
     };
