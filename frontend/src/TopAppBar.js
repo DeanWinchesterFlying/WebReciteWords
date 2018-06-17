@@ -8,10 +8,6 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 const styles = {
-    root: {
-        flexGrow: 1,
-        width: '100%',
-    },
     flex: {
         flex: 1,
     },

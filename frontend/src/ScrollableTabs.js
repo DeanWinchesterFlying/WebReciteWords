@@ -14,10 +14,11 @@ import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 import ThumbDown from '@material-ui/icons/ThumbDown';
 import Typography from '@material-ui/core/Typography';
-import ReciteContainer from './ReciteContainer'
-import SettingContainer from './SettingContainer'
-import VocabContainer from './VocabContainer'
+import ReciteContainer from './recite/ReciteContainer'
+import SettingContainer from './setting/SettingContainer'
+import VocabContainer from './vocabulary/VocabContainer'
 import Grid from '@material-ui/core/Grid';
+import {withAuthHeader} from './utils/api'
 
 function TabContainer(props) {
     return (
@@ -47,15 +48,67 @@ const styles = theme => ({
 class ScrollableTabs extends React.Component {
     state = {
         value: 0,
+        words: undefined,
+        configure: undefined,
+        vocab: undefined,
+        ptr: 0,
+        reciting: false,
+        showChinese: false,
     };
+
+    constructor(props) {
+        super(props);
+        let self = this;
+        this.handleKnow = this.handleKnow.bind(this);
+        this.handleUnKnow = this.handleUnKnow.bind(this);
+        fetch(localStorage.getItem('prefix') + '/words/', {
+            method: 'GET',
+            headers: withAuthHeader(),
+        }).then(function (response) {
+            return response.json();
+        }).then(function (response) {
+            self.setState({words: response});
+            console.log(response);
+        });
+        fetch(localStorage.getItem('prefix') + '/configuraion/', {
+            method: 'GET',
+            headers: withAuthHeader(),
+        }).then(function (response) {
+            return response.json();
+        }).then(function (response) {
+            self.setState({configure: response});
+            console.log(response);
+            fetch(localStorage.getItem('prefix') + '/vocabularies/' + response['currVocab'] + '/', {
+                method: 'GET',
+                headers: withAuthHeader(),
+            }).then(function (response) {
+                return response.json();
+            }).then(function (response) {
+                self.setState({vocab: response});
+                console.log(response);
+            });
+        });
+    }
 
     handleChange = (event, value) => {
         this.setState({ value });
+        if(value !== 0)
+            this.setState({reciting: false, ptr: 0})
     };
+
+    handleKnow() {
+        const { words, ptr } = this.state;
+        this.setState({ptr: (ptr + 1) % words.length, showChinese: false});
+    }
+
+    handleUnKnow() {
+        const { words, ptr } = this.state;
+        this.setState({ptr: ptr, showChinese: true});
+    }
 
     render() {
         const { classes } = this.props;
-        const { value } = this.state;
+        const { value, words, reciting, ptr } = this.state;
 
         return (
             <div style={{ paddingTop: 70 }}>
@@ -80,11 +133,20 @@ class ScrollableTabs extends React.Component {
                             </AppBar>
                         </Grid>
                         <Grid item>
-                            {value === 0 && <ReciteContainer/>}
+                            {value === 0
+                                && <ReciteContainer word={words && words[ptr]['word']}
+                                totalWords={words && words.length} newWords={words && words.length}
+                                symbol={words && words[ptr]['symbol']} showChinese={this.state.showChinese}
+                                chinese={words && words[ptr]['chinese']} reciting={reciting}
+                                onLearn={() => this.setState({reciting: true})}
+                                onKnow={ this.handleKnow }
+                                onUnKnow={ this.handleUnKnow }
+                                progress={ words && (100 * ptr / words.length) }/>
+                            }
                             {value === 1 && <TabContainer>Item Two</TabContainer>}
                             {value === 2 && <VocabContainer/>}
                             {value === 3 && <TabContainer>Item Four</TabContainer>}
-                            {value === 4 && <SettingContainer/>}
+                            {value === 4 && <SettingContainer config={this.state.configure}/>}
                         </Grid>
                     </Grid>
                 </div>

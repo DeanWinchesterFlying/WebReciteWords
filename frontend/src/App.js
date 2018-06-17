@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import TopAppBar from './TopAppBar'
 import ScrollableTabs from './ScrollableTabs'
-import LoginCard from './LoginCard'
+import LoginCard from './login/LoginCard'
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 class App extends Component {

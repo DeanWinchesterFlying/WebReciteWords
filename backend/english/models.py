@@ -11,11 +11,11 @@ class UserManager(BaseUserManager):
         username = self.model.normalize_username(username)
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
         return user
 
     def create_user(self, username, email=None, password=None, **extra_fields):
-        return self._create_user(username, email, password, **extra_fields)
+        return self._create_user(username=username, email=email, password=password, **extra_fields)
 
     def create_superuser(self, username, email, password, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
@@ -23,7 +23,7 @@ class UserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
-        return self._create_user(username, email, password, **extra_fields)
+        return self._create_user(username=username, email=email, password=password, **extra_fields)
 
 
 class User(AbstractBaseUser):
@@ -86,6 +86,7 @@ class Word(models.Model):
     )
     word = models.CharField(max_length=64)
     characteristic = models.CharField(max_length=15, choices=CHARACTERISTICS)
+    symbol = models.CharField(max_length=64)
     chinese = models.CharField(max_length=64)
     sentences = models.TextField(default='')
     books = models.ManyToManyField(Vocabulary, related_name='vocab_word')
@@ -95,9 +96,11 @@ class Configuration(models.Model):
     userConfig = models.OneToOneField(User, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=True, default=150)
     showChinese = models.BooleanField(default=True)
+    currVocab = models.ForeignKey(Vocabulary, on_delete=models.CASCADE, default=3)
 
 
 class LearnRecord(models.Model):
     learner = models.ForeignKey(User, on_delete=models.CASCADE)
     word = models.ForeignKey(Word, on_delete=models.CASCADE)
     iterations = models.IntegerField(default=0)
+    time = models.DateField(auto_now_add=True)
