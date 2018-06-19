@@ -1,11 +1,14 @@
 {
-  "name": "frontend",
+  "name": "frontend2",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
-    "react-router": "^4.3.1",
+    "@material-ui/core": "^1.2.2",
+    "@material-ui/icons": "^1.1.0",
+    "echarts": "^4.1.0",
+    "echarts-for-react": "^2.0.12",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4"
   },

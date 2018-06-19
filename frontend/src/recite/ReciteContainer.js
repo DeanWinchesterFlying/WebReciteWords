@@ -14,7 +14,7 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+import AddIcon from '@material-ui/icons/Add';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import RemoveCircle from '@material-ui/icons/RemoveCircle';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -24,6 +24,11 @@ import Icon from '@material-ui/core/Icon';
 import FileUpload from '@material-ui/icons/FileUpload';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import classnames from 'classnames';
+import Tooltip from '@material-ui/core/Tooltip';
+import AddDialog from '../utils/AddDialog'
+import blue from '@material-ui/core/colors/blue';
+import {withAuthHeader} from "../utils/api";
+
 
 const styles = theme => ({
     root: theme.mixins.gutters({
@@ -66,7 +71,10 @@ const styles = theme => ({
         transform: 'rotate(180deg)',
     },
     avatar: {
-        backgroundColor: red[500],
+        avatar: {
+            backgroundColor: blue[100],
+            color: blue[600],
+        },
     },
     button: {
         margin: theme.spacing.unit,
@@ -108,12 +116,11 @@ const styles = theme => ({
 });
 
 class ReciteContainer extends React.Component{
-    state = { reciting: false, expanded: false };
+    state = { reciting: false, expanded: false, openAdd: false };
 
     render() {
         const { classes, reciting } = this.props;
         const bull = <span className={classes.bullet}>•</span>;
-
         const reciteCard = (
             <div>
                 <Card className={classes.card}>
@@ -127,7 +134,7 @@ class ReciteContainer extends React.Component{
                             {this.props.chinese}
                         </Typography>}
                         <Button variant="outlined" size="large" color="primary" className={classes.button}
-                            onClick={this.props.onKnow}>
+                            onClick={() => this.props.onKnow(this.props.showChinese)}>
                             <CheckCircle className={classes.leftIcon} />
                             {this.props.showChinese && '学会了'}
                             {!this.props.showChinese && '认识'}
@@ -143,6 +150,12 @@ class ReciteContainer extends React.Component{
                         }
                     </CardContent>
                     <CardActions className={classes.actions} disableActionSpacing>
+                        <Tooltip title="添加到词库">
+                            <IconButton aria-label="Add to favorites"
+                                        onClick={() => this.setState({openAdd: true})}>
+                                <Avatar><AddIcon /></Avatar>
+                            </IconButton>
+                        </Tooltip>
                         <IconButton
                             className={classnames(classes.expand, {
                                 [classes.expandOpen]: this.state.expanded,
@@ -151,7 +164,7 @@ class ReciteContainer extends React.Component{
                             aria-expanded={this.state.expanded}
                             aria-label="Show more"
                         >
-                            <ExpandMoreIcon />
+                            <Tooltip title="查看例句"><ExpandMoreIcon /></Tooltip>
                         </IconButton>
                     </CardActions>
                     <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
@@ -212,6 +225,26 @@ class ReciteContainer extends React.Component{
 
         return (
             <div>
+                <AddDialog
+                    open={this.state.openAdd}
+                    onClose={(vocabId) => {
+                        this.setState({ openAdd: false });
+                        if(vocabId !== undefined){
+                            console.log('add to' + vocabId);
+                            fetch(localStorage.getItem('prefix') + '/vocabularies/' + vocabId + '/word/', {
+                                method: 'POST',
+                                body: JSON.stringify({
+                                    'word_id': parseInt(this.props.word_id)
+                                }),
+                                headers: withAuthHeader(),
+                            }).then(function (response) {
+                                return response.json();
+                            }).then(function (response) {
+                                console.log(response);
+                            });
+                        }
+                    }}
+                />
                 <Paper elevation={4}>
                     <Grid container direction={'column'} alignment={'center'} justify={'center'}
                           className={classes.root} >

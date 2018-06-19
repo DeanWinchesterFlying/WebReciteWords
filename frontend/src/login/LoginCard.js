@@ -190,7 +190,8 @@ class LoginCard extends React.Component {
 
     render() {
         const {classes} = this.props;
-        const dialog = (<Dialog open={this.state.register} style={{paddingTop: 20}}
+        const dialog = (
+            <Dialog open={this.state.register} style={{paddingTop: 20}}
                                 onClose={() => this.setState({register: false})}>
             <DialogTitle id="form-dialog-title">注册</DialogTitle>
             <DialogContent>

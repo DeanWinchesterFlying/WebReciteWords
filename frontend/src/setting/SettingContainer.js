@@ -14,6 +14,12 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import {withAuthHeader} from "../utils/api";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
 const styles = theme => ({
     bootstrapRoot: {
@@ -80,18 +86,21 @@ const styles = theme => ({
     },
 });
 
+function Transition(props) {
+    return <Slide direction="up" {...props} />;
+}
 
 class SettingContainer extends React.Component {
     state = {
-        name: 'Cat in the Hat',
-        age: '',
         currencyV: undefined,
         currencyQ: 150,
+        open: false,
     };
 
     constructor(props){
         super(props);
         let self = this;
+        this.handleSetting = this.handleSetting.bind(this);
         fetch(localStorage.getItem('prefix') + '/vocabularies/', {
             method: 'GET',
             headers: withAuthHeader(),
@@ -116,12 +125,62 @@ class SettingContainer extends React.Component {
         this.setState({ [name]: event.target.checked });
     };
 
+    handleSetting() {
+        let self = this;
+        fetch(localStorage.getItem('prefix') + '/configuraion/' + this.props.config['id'] + '/', {
+            method: 'PATCH',
+            body: JSON.stringify({
+                'quantity': this.state.currencyQ,
+                'currVocab': this.state.currencyV,
+                'showChinese': this.state.checkedC,
+            }),
+            headers: withAuthHeader(),
+        }).then(function (response) {
+            return response.json();
+        }).then(function (response) {
+            console.log(response);
+            self.props.onChangeConfig(self.state.currencyQ, self.state.checkedC, self.state.currencyV);
+        });
+    }
+
     render() {
         const { classes } = this.props;
         const { vocabularies } = this.state;
         const checkedC = Boolean(this.state.checkedC);
+        const dialog = (
+            <Dialog
+                open={this.state.open}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => this.setState({ open: false })}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle id="alert-dialog-slide-title">
+                    {"更新设置"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        是否更新单词设置
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => this.setState({ open: false })} color="primary">
+                        取消
+                    </Button>
+                    <Button onClick={() => {
+                        this.setState({ open: false });
+                        this.handleSetting();
+                    }} color="primary">
+                        确定
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
+
         return (
             <Paper className={classes.root}>
+                {dialog}
                 <form className={classes.container} noValidate autoComplete="off">
                     <Grid container direction={'column'} justify={'center'} className={classes.root}
                           alignment={'flex-start'} spacing={8}>
@@ -228,7 +287,8 @@ class SettingContainer extends React.Component {
                             </FormControl>
                         </Grid>
                         <Grid item>
-                            <Button variant="raised" color="primary" size="large" className={classes.button1}>
+                            <Button variant="raised" color="primary" size="large"
+                                    className={classes.button1} onClick={() => this.setState({ open: true })}>
                                 <Typography variant="body" className={classes.text1}>
                                     提交
                                 </Typography>
