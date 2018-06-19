@@ -35,9 +35,14 @@ class VocabularySerializer(serializers.ModelSerializer):
 
 
 class LearnRecordSerializer(serializers.ModelSerializer):
+    word = serializers.SerializerMethodField()
+
     class Meta:
         model = LearnRecord
         fields = '__all__'
+
+    def get_word(self, obj):
+        return WordSerializer(obj.word).data
 
 
 class ConfigurationSerializer(serializers.ModelSerializer):
