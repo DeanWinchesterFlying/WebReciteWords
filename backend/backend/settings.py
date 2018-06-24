@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-AUTH_USER_MODEL = "english.User"
+#AUTH_USER_MODEL = "english.User"
 
 # Application definition
 
@@ -157,12 +157,32 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'english': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'english',
+        'USER': 'root',
+        'PASSWORD':'linzhijie99.',
+        'HOST':'localhost',
+        'PORT':'3306',
     }
 }
+
+'''DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'english',
+        'USER': 'root',
+        'PASSWORD':'linzhijie99.',
+        'HOST':'localhost',
+        'PORT':'3306',
+    }
+}'''
 
 
 # Password validation

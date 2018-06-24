@@ -4,34 +4,19 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import PhoneIcon from '@material-ui/icons/Phone';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
-import HelpIcon from '@material-ui/icons/Help';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
-import ThumbDown from '@material-ui/icons/ThumbDown';
 import Typography from '@material-ui/core/Typography';
 import ReciteContainer from './recite/ReciteContainer'
 import SettingContainer from './setting/SettingContainer'
 import VocabContainer from './vocabulary/VocabContainer'
 import ProgressContainer from './progress/ProgressContainer'
+import ExamContainer from './examine/ExamContainer'
 import Grid from '@material-ui/core/Grid';
 import {withAuthHeader} from './utils/api'
-
-function TabContainer(props) {
-    return (
-        <Typography component="div" style={{ padding: 100 * 3 }}>
-            {props.children}
-        </Typography>
-    );
-}
-
-TabContainer.propTypes = {
-    children: PropTypes.node.isRequired,
-};
 
 const styles = theme => ({
     root: {
@@ -69,13 +54,13 @@ class ScrollableTabs extends React.Component {
         }).then(function (response) {
             return response.json();
         }).then(function (response) {
-            let words = new Array(response.length);
-            for(let j = 0, len = response.length; j < len; j++) {
-                words[j] = response[j]['word'];
+            let words = new Array(response['record'].length);
+            for(let j = 0, len = response['record'].length; j < len; j++) {
+                words[j] = response['record'][j]['word'];
             }
-            self.setState({learnRecords: response, words: words});
+            self.setState({learnRecords: response['record'], words: words, newWords: response['new_words']});
             console.log(response);
-            fetch(localStorage.getItem('prefix') + '/learn_records/new_words/', {
+            /*fetch(localStorage.getItem('prefix') + '/learn_records/new_words/', {
                 method: 'GET',
                 headers: withAuthHeader(),
             }).then(function (response) {
@@ -83,7 +68,7 @@ class ScrollableTabs extends React.Component {
             }).then(function (response) {
                 self.setState({newWords: response['new_words']});
                 console.log(response);
-            });
+            });*/
         });
         fetch(localStorage.getItem('prefix') + '/configuraion/', {
             method: 'GET',
@@ -113,7 +98,6 @@ class ScrollableTabs extends React.Component {
 
     handleKnow(unknown) {
         const { words, ptr, learnRecords  } = this.state;
-        //console.log(unknown);
         if(!unknown){
             fetch(localStorage.getItem('prefix') + '/learn_records/' + learnRecords[ptr]['id'] + '/', {
                 method: 'PATCH',
@@ -131,14 +115,27 @@ class ScrollableTabs extends React.Component {
     }
 
     handleUnKnow() {
-        const { words, ptr } = this.state;
+        const { ptr } = this.state;
         this.setState({ptr: ptr, showChinese: true});
     }
 
     render() {
         const { classes } = this.props;
-        const { value, words, reciting, ptr, newWords } = this.state;
-
+        const { value, words, reciting, ptr, newWords, vocab, configure } = this.state;
+        const reciteContainer = (
+            <ReciteContainer word={words && words[ptr]['word']}
+                             totalWords={words && words.length} newWords={newWords}
+                             symbol={words && words[ptr]['symbol']} showChinese={this.state.showChinese}
+                             chinese={words && words[ptr]['chinese']} reciting={reciting}
+                             word_id={words && words[ptr]['id']}
+                             onLearn={() => this.setState({reciting: true})}
+                             onKnow={ this.handleKnow }
+                             onUnKnow={ this.handleUnKnow }
+                             progress={ words && (100 * ptr / words.length) }/>
+        );
+        const examContainer = (
+            <ExamContainer numberWords={configure && configure['exam']}/>
+        );
         return (
             <div style={{ paddingTop: 70 }}>
                 <div className={classes.root}>
@@ -162,24 +159,16 @@ class ScrollableTabs extends React.Component {
                             </AppBar>
                         </Grid>
                         <Grid item>
-                            {value === 0
-                                && <ReciteContainer word={words && words[ptr]['word']}
-                                totalWords={words && words.length} newWords={newWords}
-                                symbol={words && words[ptr]['symbol']} showChinese={this.state.showChinese}
-                                chinese={words && words[ptr]['chinese']} reciting={reciting}
-                                word_id={words && words[ptr]['id']}
-                                onLearn={() => this.setState({reciting: true})}
-                                onKnow={ this.handleKnow }
-                                onUnKnow={ this.handleUnKnow }
-                                progress={ words && (100 * ptr / words.length) }/>
-                            }
-                            {value === 1 && <TabContainer>Item Two</TabContainer>}
+                            {value === 0 && reciteContainer }
+                            {value === 1 && examContainer }
                             {value === 2 && <VocabContainer/>}
-                            {value === 3 && <ProgressContainer/>}
+                            {value === 3 && <ProgressContainer totalWords={vocab && vocab['total_words']}
+                                            todayWords={words && words.length} newWords={newWords}/>}
                             {value === 4 && <SettingContainer config={this.state.configure}
-                                onChangeConfig={(q, c, v) => {
+                                onChangeConfig={(q, c, v, e) => {
                                     this.setState({
                                         configure: {'quantity': q, 'currVocab': v, 'showChinese': c,
+                                            'exam': e,
                                             'userConfig': this.state.configure['userConfig']}
                                     })
                                 }}/>}

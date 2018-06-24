@@ -14,16 +14,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import AddIcon from '@material-ui/icons/Add';
-import Typography from '@material-ui/core/Typography';
 import blue from '@material-ui/core/colors/blue';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Lock from '@material-ui/icons/Lock';
-import Email from '@material-ui/icons/Email';
 import {withAuthHeader} from "./api";
 
-const emails = ['username@gmail.com', 'user02@gmail.com'];
 const styles = {
     avatar: {
         backgroundColor: blue[100],
@@ -74,7 +69,7 @@ class AddDialog extends React.Component {
         }
     }
 
-    componentWillReceiveProps = function(nextProps) {
+    componentDidMount = function(nextProps) {
         this.getMyVocabulary();
     };
 

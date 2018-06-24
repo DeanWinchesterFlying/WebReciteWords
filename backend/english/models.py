@@ -95,6 +95,7 @@ class Word(models.Model):
 class Configuration(models.Model):
     userConfig = models.OneToOneField(User, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=True, default=150)
+    exam = models.IntegerField(null=True, default=20)
     showChinese = models.BooleanField(default=True)
     currVocab = models.ForeignKey(Vocabulary, on_delete=models.CASCADE, default=3)
 

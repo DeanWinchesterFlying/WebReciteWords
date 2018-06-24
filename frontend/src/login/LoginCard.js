@@ -7,15 +7,11 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Avatar from '@material-ui/core/Avatar';
+//import Avatar from '@material-ui/core/Avatar';
 import Lock from '@material-ui/icons/Lock'
 import InputAdornment from '@material-ui/core/InputAdornment';
-import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
 import Paper from '@material-ui/core/Paper';
-import CardMedia from '@material-ui/core/CardMedia';
 import { Redirect } from 'react-router-dom';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -40,12 +36,12 @@ const styles = theme => ({
         //background: '#ECEFF1',
     },
     button: {
-        background: 'linear-gradient(45deg, #2196F3 30%, #64B5F6 90%)',
+        background: 'linear-gradient(45deg, #00B8D4 30%, #64FFDA 90%)',
         borderRadius: 5,
         border: 0,
         color: 'white',
-        height: 40,
-        width: 240,
+        height: 32,
+        width: 260,
         padding: '0 30px',
         boxShadow: '0 3px 5px 2px rgba(135, 105, 255, .30)',
     },
@@ -94,6 +90,7 @@ class LoginCard extends React.Component {
             }).then(function(response) {
                 if(response['token'] === undefined)
                     throw new Error();
+                localStorage.setItem('username', account);
                 localStorage.setItem('token', response['token']);
                 self.setState({login: true});
                 console.log(response);
@@ -173,6 +170,7 @@ class LoginCard extends React.Component {
                         return response.json();
                     }).then(function(response) {
                         localStorage.setItem('token', response['token']);
+                        localStorage.setItem('username', registerAccount);
                         self.setState({login: true});
                         console.log(response);
                     });
@@ -190,6 +188,14 @@ class LoginCard extends React.Component {
 
     render() {
         const {classes} = this.props;
+        const css = (
+            <div>
+                <link rel="stylesheet" href="https://static.baydn.com/baydn/public/bay-components/v0.3.1/bay-components.min.css"/>
+                <link rel="stylesheet" href="https://static.baydn.com/baydn/public/iconbay/v0.1.19/iconbay.css"/>
+                <link rel="stylesheet" href="https://static.baydn.com/baydn/public/xbay/v1.11.5/client-ui.css"/>
+                <link rel="stylesheet" href="https://static.baydn.com/web/public/account-client-css-36cd83c3ecb6834f.css"/>
+            </div>
+        );
         const dialog = (
             <Dialog open={this.state.register} style={{paddingTop: 20}}
                                 onClose={() => this.setState({register: false})}>
@@ -199,7 +205,7 @@ class LoginCard extends React.Component {
                     注册新的用户
                 </DialogContentText>
                 <Grid container spacing={16} alignItems="flex-end">
-                    <Grid item> <AccountCircle /> </Grid>
+                    <Grid item> <AccountCircle color="action"/> </Grid>
                     <Grid item>
                         <TextField required autoFocus margin="dense" id="register_account"
                             helperText={this.state.registerAccountInfo} error={this.state.registerAccountError}
@@ -208,7 +214,7 @@ class LoginCard extends React.Component {
                     </Grid>
                 </Grid>
                 <Grid container spacing={16} alignItems="flex-end">
-                    <Grid item> <Email /> </Grid>
+                    <Grid item> <Email color="action"/> </Grid>
                     <Grid item>
                         <TextField required autoFocus margin="dense" id="register_email"
                                    helperText={this.state.registerEmailInfo} error={this.state.registerEmailError}
@@ -217,7 +223,7 @@ class LoginCard extends React.Component {
                     </Grid>
                 </Grid>
                 <Grid container spacing={16} alignItems="flex-end">
-                    <Grid item> <Lock/> </Grid>
+                    <Grid item> <Lock color="action"/> </Grid>
                     <Grid item>
                         <TextField required autoFocus margin="dense" id="register_pass"
                             label="Password" type="password" fullWidth
@@ -226,7 +232,7 @@ class LoginCard extends React.Component {
                     </Grid>
                 </Grid>
                 <Grid container spacing={16} alignItems="flex-end">
-                    <Grid item> <Lock/> </Grid>
+                    <Grid item> <Lock color="action"/> </Grid>
                     <Grid item>
                         <TextField required autoFocus margin="dense" id="register_pass_confirm" label="Confirm Password"
                                    type="password" fullWidth
@@ -262,77 +268,80 @@ class LoginCard extends React.Component {
                     </Button>
                 </DialogActions>
             </Dialog>);
-        if(this.state.login /*|| localStorage.getItem('token') !== undefined*/)
+        const login = Boolean(localStorage.getItem('token'));
+        console.log(localStorage.getItem('token'));
+        if(this.state.login || login)
             return <Redirect push to={'/'}/>;
-        return (<div style={{ paddingTop: 70 }} className={classes.container} >
-            {dialog}
-            {errorDialog1}
-            <Card className={classes.root}>
-                {
-                    this.state.loading &&
-                    <CardContent>
-                        <Grid container direction={'column'}
-                              alignItems={'center'}>
-                            <Grid item><CircularProgress className={classes.progress} size={50} /></Grid>
+        //style="transition: -webkit-transform 0.6s ease; transform: translate3d(-1350px, 0px, 0px);"
+        return (
+            <div style={{ paddingTop: 70 }} className={classes.container} >
+                {css}
+                {dialog}
+                {errorDialog1}
+                <div className="login-client-page">
+                    <div className="slides" id="slides">
+                        <div className="viewport" id="viewport">
+                            <div className="page-view">
+                                <div className="view-container">
+                                    <img src="https://static.baydn.com/web/images/intro-client-checkin.png"/>
+                                    <div className="title">坚持打卡</div>
+                                    <div className="content">享受学习的快乐</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="login-wrap">
+                        <Grid container direction={'column'} spacing={24}
+                              alignItems={'center'} style={{marginTop:'128px'}}>
+                            <Grid item>
+                                <TextField style={{ fontSize: 36 }}
+                                    label="Email/Account"
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <AccountCircle color="action"/>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    onChange={(event) => this.setState({account: event.target.value})}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    label="Password"
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <Lock color="action"/>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    type="password"
+                                    autoComplete="current-password"
+                                    onChange={(event) => this.setState({password: event.target.value})}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <Button className={classes.button} onClick={this.handleClick}>
+                                    登陆
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <a className="register-text" href='#' onClick={() => this.setState({
+                                    register: true,
+                                    registerAccountError:false, registerAccountInfo:'',
+                                    registerEmailError:false, registerEmailInfo:'',
+                                    registerPass1Error:false, registerPass1Info:'',
+                                    registerPass2Error:false, registerPass2Info:'',
+                                })}>还没有账号？
+                                    <span style={{color:'#2196F3'}}>去注册</span>
+                                </a>
+                            </Grid>
                         </Grid>
-                    </CardContent>
-                }
-                { !this.state.loading &&
-                <CardContent>
-                    <Grid container direction={'column'} spacing={24}
-                          alignItems={'center'}>
-                        <Grid item>
-                            <TextField
-                                label="Email/Account"
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <AccountCircle />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                onChange={(event) => this.setState({account: event.target.value})}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                label="Password"
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <Lock/>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                type="password"
-                                autoComplete="current-password"
-                                onChange={(event) => this.setState({password: event.target.value})}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <Button className={classes.button} onClick={this.handleClick}>
-                                登陆
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </CardContent>}
-            </Card>
-            <br/>
-            <Paper className={classes.paper} elevation={4}>
-                <Typography component="h3">
-                    New to us?
-                    <a href='#' onClick={() => this.setState({
-                        register: true,
-                        registerAccountError:false, registerAccountInfo:'',
-                        registerEmailError:false, registerEmailInfo:'',
-                        registerPass1Error:false, registerPass1Info:'',
-                        registerPass2Error:false, registerPass2Info:'',
-                    })}>
-                        Sign Up
-                    </a>
-                </Typography>
-            </Paper>
-        </div>);
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 

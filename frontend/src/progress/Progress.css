@@ -1,0 +1,15 @@
+.header{position:relative}
+.header .statistics-container {
+    position:absolute;
+    top:60px;left:50%;
+    transform:translate(-50%);
+    padding-bottom:20px;
+    border-bottom:1px solid #eee}
+.header .statistics-item{padding:0 30px}
+.header .value
+{font-family:Impact;font-size:36px}
+.header .name,
+.header .value
+{letter-spacing:.4px;color:#666;text-align:center}
+.header .name
+{font-family:PingFangSC;font-size:12px}.header .word-total .value{color:#28bea0}.chart-section{width:1006px;margin-top:211px}.chart-section .chart-item{width:480px;height:260px;border-radius:2px;background-color:#fff;box-shadow:5px 10px 22px 0 rgba(0,0,0,.15)}.chart-section .chart-item:not(:first-child){margin-left:46px}.chart-section .chart-header{margin:22px 44px 0 33px}.chart-section .chart-header .chart-title{font-family:PingFangSC;font-size:14px;text-indent:5px;letter-spacing:.5px;color:#666;line-height:16px;border-left:2.4px solid #70c2b2}.chart-section .chart-header .chart-legend{font-family:PingFangSC;font-size:12px;letter-spacing:.4px;height:18px;line-height:18px;color:#999}.chart-section .chart-header .legend-icon{width:17px;height:17px;border-radius:1.2px;background-color:#bfe497;margin-left:3px}.chart-section .chart-header .legend-master{background-color:#fce9b3}.chart-section .chart-header .legend-fresh{background-color:#ffd083;margin-right:34px}.chart-section .chart-body{width:480px;height:218px}

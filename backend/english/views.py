@@ -21,21 +21,28 @@ import datetime
 
 def make_learning_plan(user):
     print('make learning plan.....')
-    configuration = Configuration.objects.all().get(userConfig=user)
+    try:
+        configuration = Configuration.objects.all().get(userConfig=user)
+    except BaseException:
+        configuration = Configuration(userConfig=user, currVocab=Vocabulary.objects.all().get(id=3))
+        configuration.save()
     LearnRecord.objects.all().filter(learner=user, iterations=0).delete()
-    learned_words = LearnRecord.objects.all().filter(learner=user)
+    learned_records = LearnRecord.objects.all().filter(learner=user)
+    learned_words = learned_records.values_list('word', flat=True)
+    print(learned_words)
     all_words = configuration.currVocab.vocab_word.all()
     all_words.difference(learned_words)
     new_words = list(all_words)
     random.shuffle(new_words)
-    new_words = new_words[0: configuration.quantity]
-    learnRecords = []
+    if len(new_words) >= configuration.quantity:
+        new_words = new_words[0: configuration.quantity]
+    learned_records = []
     for word in new_words:
         learnRecord = LearnRecord(learner=user, word=word)
-        learnRecords.append(learnRecord)
-    LearnRecord.objects.bulk_create(learnRecords)
+        learned_records.append(learnRecord)
+    LearnRecord.objects.bulk_create(learned_records)
     print('make learning plan successfully.....')
-    return learnRecords
+    return learned_records
 
 
 class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
@@ -49,6 +56,9 @@ class UserViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, GenericVie
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
+        configuration = Configuration(userConfig=User.objects.all().get(username=serializer.data['username'])
+                                      , currVocab=Vocabulary.objects.all().get(id=3))
+        configuration.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
@@ -79,7 +89,6 @@ class WordViewSet(viewsets.ModelViewSet):
 class VocabularyViewSet(viewsets.ModelViewSet):
     queryset = Vocabulary.objects.all()
     serializer_class = VocabularySerializer
-    #permission_classes = (IsAuthenticated,)
 
     @action(['get', 'post', 'delete'], detail=True)
     def word(self, request, *args, **kwargs):
@@ -126,22 +135,59 @@ class VocabularyViewSet(viewsets.ModelViewSet):
 
 class LearnRecordViewSet(viewsets.ModelViewSet):
     queryset = LearnRecord.objects.all()
+    fake_chinese = list(Word.objects.all().values_list('chinese', flat=True))
     serializer_class = LearnRecordSerializer
     permission_classes = (IsAuthenticated,)
 
     def list(self, request, *args, **kwargs):
         tmp = self.get_queryset().filter(learner=request.user, time=datetime.date.today())
         if tmp.count() == 0:
-            queryset = make_learning_plan(request.user)
+            tmp = make_learning_plan(request.user)
+        configuration = Configuration.objects.all().get(userConfig=request.user)
+        learn_records_groups = {}
+        learn_records = self.get_queryset().filter(learner=request.user, iterations__gt=0).order_by('iterations')
+        for record in learn_records:
+            if learn_records_groups.get(record.time) is None:
+                learn_records_groups[record.time] = []
+            learn_records_groups[record.time].append(record)
+        final_records = []
+        today = datetime.date.today()
+        if learn_records_groups.get(today + datetime.timedelta(days=-1)):
+            final_records.extend(learn_records_groups[today + datetime.timedelta(days=-1)])
+        if learn_records_groups.get(today + datetime.timedelta(days=-2)):
+            final_records.extend(learn_records_groups[today + datetime.timedelta(days=-2)])
+        if learn_records_groups.get(today + datetime.timedelta(days=-3)):
+            final_records.extend(learn_records_groups[today + datetime.timedelta(days=-3)])
+        if len(final_records) > configuration.quantity:
+            final_records = random.sample(final_records, configuration.quantity // 2)
+        left = configuration.quantity - len(final_records)
+        if left >= len(tmp):
+            final_records.extend(tmp)
         else:
-            queryset = tmp
+            final_records.extend(tmp[0:left])
+        print(final_records)
+        queryset = final_records
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        return Response({'record': data, 'new_words': left})
+
+    @action(methods=['get'], detail=False)
+    def examination(self, request):
+        configuration = Configuration.objects.all().get(userConfig=request.user)
+        learn_records = self.get_queryset().filter(learner=request.user, iterations__gt=0)
+        words = [record.word for record in learn_records]
+        if len(words) > configuration.exam:
+            words = random.sample(words, configuration.exam)
+
+        data = WordSerializer(words, many=True).data
+        for word in data:
+            word['fake_chinese'] = random.sample(self.fake_chinese, 3)
+        return Response(data)
 
     @action(methods=['get'], detail=False)
     def new_words(self, request, *args, **kwargs):

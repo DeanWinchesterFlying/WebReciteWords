@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
@@ -110,6 +109,7 @@ class SettingContainer extends React.Component {
             console.log(self.props.config);
             self.setState({vocabularies: response, currencyV: self.props.config['currVocab'],
                 currencyQ: self.props.config['quantity'],
+                currencyE: self.props.config['exam'],
                 checkedC: self.props.config['showChinese'],
                 checkedA: false});
         });
@@ -133,13 +133,15 @@ class SettingContainer extends React.Component {
                 'quantity': this.state.currencyQ,
                 'currVocab': this.state.currencyV,
                 'showChinese': this.state.checkedC,
+                'exam': this.state.currencyE,
             }),
             headers: withAuthHeader(),
         }).then(function (response) {
             return response.json();
         }).then(function (response) {
             console.log(response);
-            self.props.onChangeConfig(self.state.currencyQ, self.state.checkedC, self.state.currencyV);
+            self.props.onChangeConfig(self.state.currencyQ, self.state.checkedC,
+                self.state.currencyV, self.state.currencyE);
         });
     }
 
@@ -252,6 +254,39 @@ class SettingContainer extends React.Component {
                                 margin="normal"
                             >
                                 {[20, 50, 80, 100, 150, 200].map(value => (
+                                    <MenuItem key={value} value={value}>
+                                        {value}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                id="select-number"
+                                select
+                                label="单次考核量"
+                                className={classes.textField}
+                                value={this.state.currencyE}
+                                onChange={this.handleChange('currencyE')}
+                                SelectProps={{
+                                    MenuProps: {
+                                        className: classes.menu,
+                                    },
+                                }}
+                                InputProps={{
+                                    disableUnderline: true,
+                                    classes: {
+                                        root: classes.bootstrapRoot,
+                                        input: classes.bootstrapInput,
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                    className: classes.bootstrapFormLabel,
+                                }}
+                                margin="normal"
+                            >
+                                {[10, 20, 30, 40].map(value => (
                                     <MenuItem key={value} value={value}>
                                         {value}
                                     </MenuItem>

@@ -6,22 +6,16 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import red from '@material-ui/core/colors/red';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import AddIcon from '@material-ui/icons/Add';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import RemoveCircle from '@material-ui/icons/RemoveCircle';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import FileUpload from '@material-ui/icons/FileUpload';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import classnames from 'classnames';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -230,11 +224,11 @@ class ReciteContainer extends React.Component{
                     onClose={(vocabId) => {
                         this.setState({ openAdd: false });
                         if(vocabId !== undefined){
-                            console.log('add to' + vocabId);
+                            //console.log('add to' + vocabId);
                             fetch(localStorage.getItem('prefix') + '/vocabularies/' + vocabId + '/word/', {
                                 method: 'POST',
                                 body: JSON.stringify({
-                                    'word_id': parseInt(this.props.word_id)
+                                    'word_id': parseInt(this.props.word_id, 10)
                                 }),
                                 headers: withAuthHeader(),
                             }).then(function (response) {

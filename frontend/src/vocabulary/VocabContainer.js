@@ -5,7 +5,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Paper from '@material-ui/core/Paper';
@@ -141,7 +140,12 @@ class VocabContainer extends React.Component{
         }).then(function (response) {
             return response.json();
         }).then(function (response) {
-            self.setState({myVocab: response});
+            if(response.length > 0){
+                self.getWords(self, response[0]['id']);
+                self.setState({myVocab: response, value: response[0]['id']});
+            }
+            else
+                self.setState({myVocab: response});
             console.log(response);
         });
     }

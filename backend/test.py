@@ -1,4 +1,5 @@
 import datetime
 
-print(datetime.date.today())
-print(datetime.date.today() + datetime.timedelta(days=1))
+d = ['a', 'b', 'c', 'd']
+d.reverse()
+print(d)

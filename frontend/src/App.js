@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 import TopAppBar from './TopAppBar'
 import ScrollableTabs from './ScrollableTabs'
@@ -10,7 +10,7 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        localStorage.setItem('prefix', 'http://localhost:8000/api')
+        localStorage.setItem('prefix', 'http://10.214.155.246:8000/api')
     }
 
     state = {
