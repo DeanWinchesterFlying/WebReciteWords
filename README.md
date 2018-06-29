@@ -6,6 +6,9 @@
 + 建议使用用户名learner1，密码123456789，数据较为全面  
 
 # 前端部署
+
+## 基于NodeJS
+
 ```
 cd frontend
 npm install # 安装依赖库
@@ -13,6 +16,8 @@ npm start # 挂起前端
 ```
 
 # 后端部署
+
+## 基于Python3
 
 ## 安装依赖库
 ```
