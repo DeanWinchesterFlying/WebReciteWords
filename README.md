@@ -1,5 +1,6 @@
 # 已经部署的版本
 
++ github项目地址: https://github.com/DeanWinchesterFlying/WebReciteWords  
 + 使用腾讯云服务器部署: http://111.230.148.106:5000/  
 + 前端使用 nodejs 部署，后端使用 django + uwsgi 部署  
 + 数据库使用mysql  
