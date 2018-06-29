@@ -16,6 +16,14 @@ npm install # 安装依赖库
 npm start # 挂起前端
 ```
 
+或者
+```
+cd frontend
+npm run build
+npm insall -g serve
+serve -s build
+```
+
 # 后端部署
 
 ## 基于Python3
