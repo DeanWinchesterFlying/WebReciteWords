@@ -169,7 +169,8 @@ class ScrollableTabs extends React.Component {
                                     this.setState({
                                         configure: {'quantity': q, 'currVocab': v, 'showChinese': c,
                                             'exam': e,
-                                            'userConfig': this.state.configure['userConfig']}
+                                            'userConfig': this.state.configure['userConfig']
+                                            , 'id': this.state.configure['id']}
                                     })
                                 }}/>}
                         </Grid>

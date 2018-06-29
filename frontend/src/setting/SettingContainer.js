@@ -19,6 +19,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import InfoDialog from '../utils/InfoDialog'
 
 const styles = theme => ({
     bootstrapRoot: {
@@ -142,12 +143,13 @@ class SettingContainer extends React.Component {
             console.log(response);
             self.props.onChangeConfig(self.state.currencyQ, self.state.checkedC,
                 self.state.currencyV, self.state.currencyE);
+            self.setState({settingOk: true});
         });
     }
 
     render() {
         const { classes } = this.props;
-        const { vocabularies } = this.state;
+        const { vocabularies, settingOk } = this.state;
         const checkedC = Boolean(this.state.checkedC);
         const dialog = (
             <Dialog
@@ -183,6 +185,8 @@ class SettingContainer extends React.Component {
         return (
             <Paper className={classes.root}>
                 {dialog}
+                <InfoDialog open={settingOk} onClose={() => this.setState({settingOk: false})}
+                            title={"设置"} content={"修改设置成功"} btn={"确定"}/>
                 <form className={classes.container} noValidate autoComplete="off">
                     <Grid container direction={'column'} justify={'center'} className={classes.root}
                           alignment={'flex-start'} spacing={8}>
