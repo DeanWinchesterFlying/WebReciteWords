@@ -31,6 +31,7 @@ import lightGreen from '@material-ui/core/colors/lightGreen';
 import yellow from '@material-ui/core/colors/yellow';
 import orange from '@material-ui/core/colors/orange';
 import red from '@material-ui/core/colors/red';
+import InfoDialog from '../utils/InfoDialog'
 
 const styles = theme => ({
     avatorA: {
@@ -152,9 +153,10 @@ const styles = theme => ({
     }
 });
 
+
 class ExamContainer extends React.Component{
     state = { expanded: false,
-        openAdd: false, achieved: false, test: false, wrong: 'E' };
+        openAdd: false, achieved: false, test: false, wrong: 'E', noWords: false };
 
     constructor(props){
         super(props);
@@ -209,11 +211,16 @@ class ExamContainer extends React.Component{
             return response.json();
         }).then(function (response) {
             console.log(response);
-            let choices = [response[0]['chinese']];
-            response[0]['fake_chinese'].forEach((v) => choices.push(v));
-            self.shuffle(choices);
-            self.setState({test: true, ptr: 0, examWords: response, choices: choices, correct: 0, time: 0});
-            self.timeCount();
+            if(response.length > 0){
+                let choices = [response[0]['chinese']];
+                response[0]['fake_chinese'].forEach((v) => choices.push(v));
+                self.shuffle(choices);
+                self.setState({test: true, ptr: 0, examWords: response, choices: choices, correct: 0, time: 0});
+                self.timeCount();
+            }
+            else{
+                self.setState({noWords: true})
+            }
         });
     }
 
@@ -260,7 +267,13 @@ class ExamContainer extends React.Component{
 
     render() {
         const { classes, numberWords } = this.props;
-        const { test, achieved, ptr, examWords, choices, correct, useTime, wrong } = this.state;
+        const { test, achieved, ptr, examWords, choices, correct, useTime, wrong, noWords } = this.state;
+        const noWordDialog = (
+            <div>
+                <InfoDialog open={noWords} onClose={() => this.setState({noWords: false})}
+                title={"无考试"} content={"你还没学过新单词呢"} btn={"确定"}/>
+            </div>
+        );
         let length;
         const css = (
             <div>
@@ -371,6 +384,9 @@ class ExamContainer extends React.Component{
         return (
             <div className="header clearfix">
                 {css}
+                {
+                    noWords && noWordDialog
+                }
                 <AddDialog
                     open={this.state.openAdd}
                     onClose={(vocabId) => {

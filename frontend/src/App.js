@@ -10,7 +10,8 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        localStorage.setItem('prefix', 'http://10.214.155.246:8000/api')
+        localStorage.setItem('prefix', 'http://111.230.148.106:8000/api');
+        localStorage.setItem('title', '秋酿英语');
     }
 
     state = {
@@ -18,6 +19,7 @@ class App extends Component {
     };
 
     render() {
+        document.title = localStorage.getItem('title');
         return (
             <BrowserRouter>
                 <Switch>
