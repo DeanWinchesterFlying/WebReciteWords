@@ -165,16 +165,18 @@ class LearnRecordViewSet(viewsets.ModelViewSet):
             final_records.extend(tmp)
         else:
             final_records.extend(tmp[0:left])
-        print(final_records)
         queryset = final_records
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-
+        cnt = 0
+        for r in final_records:
+            if r.iterations == 0:
+                cnt += 1
         serializer = self.get_serializer(queryset, many=True)
         data = serializer.data
-        return Response({'record': data, 'new_words': left})
+        return Response({'record': data, 'new_words': cnt})
 
     @action(methods=['get'], detail=False)
     def examination(self, request):
@@ -248,3 +250,4 @@ class ConfiguraionViewSet(mixins.ListModelMixin,
 class LearningPlan(APIView):
     def get(self, request):
         return Response("hello world")
+

@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
-
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -29,12 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-#AUTH_USER_MODEL = "english.User"
+AUTH_USER_MODEL = "english.User"
 
 # Application definition
 
 INSTALLED_APPS = [
-    'english.apps.EnglishConfig',
     'rest_framework',
     'django_filters',
     'corsheaders',
@@ -45,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'english.apps.EnglishConfig',
 ]
 
 REST_FRAMEWORK = {
@@ -81,11 +80,11 @@ JWT_AUTH = {
     'JWT_VERIFY': True,
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_LEEWAY': 0,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
     'JWT_AUDIENCE': None,
     'JWT_ISSUER': None,
     'JWT_ALLOW_REFRESH': True,
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=30),
 
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
@@ -159,31 +158,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 DATABASES = {
-    'default': {
+    'english': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
-    'english': {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'english',
         'USER': 'root',
-        'PASSWORD':'linzhijie99.',
+        'PASSWORD':'root',
         'HOST':'localhost',
         'PORT':'3306',
     }
 }
-
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'english',
-        'USER': 'root',
-        'PASSWORD':'linzhijie99.',
-        'HOST':'localhost',
-        'PORT':'3306',
-    }
-}'''
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -222,3 +209,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+

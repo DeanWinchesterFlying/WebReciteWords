@@ -87,7 +87,7 @@ class Word(models.Model):
     word = models.CharField(max_length=64)
     characteristic = models.CharField(max_length=15, choices=CHARACTERISTICS)
     symbol = models.CharField(max_length=64)
-    chinese = models.CharField(max_length=64)
+    chinese = models.TextField()
     sentences = models.TextField(default='')
     books = models.ManyToManyField(Vocabulary, related_name='vocab_word')
 
