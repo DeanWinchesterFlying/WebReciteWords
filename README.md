@@ -27,9 +27,9 @@ pip install -r requirements.txt # 安装依赖库
 ```
 
 ## 数据库部署
-·默认数据库用户名为root，密码为root
-·创建数据库english
-·创建数据库关系
++ 默认数据库用户名为root，密码为root  
++ 创建数据库english  
++ 创建数据库关系  
 ```
 rm -r backend/migrations
 python manage.py makemigrations --empty english
