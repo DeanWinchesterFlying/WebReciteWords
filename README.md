@@ -34,6 +34,7 @@ pip install -r requirements.txt # 安装依赖库
 rm -r backend/migrations
 python manage.py makemigrations --empty english
 python manage.py makemigrations
+python manage.py migrate english # 创建数据库关系
 python manage.py migrate # 创建数据库关系
 ```
 
