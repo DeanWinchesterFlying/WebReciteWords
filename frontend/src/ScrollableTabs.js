@@ -78,15 +78,21 @@ class ScrollableTabs extends React.Component {
         }).then(function (response) {
             self.setState({configure: response});
             console.log(response);
-            fetch(localStorage.getItem('prefix') + '/vocabularies/' + response['currVocab'] + '/', {
-                method: 'GET',
-                headers: withAuthHeader(),
-            }).then(function (response) {
-                return response.json();
-            }).then(function (response) {
-                self.setState({vocab: response});
-                console.log(response);
-            });
+            if(response['currVocab'] === undefined){
+                localStorage.removeItem('token');
+                localStorage.removeItem('username');
+            }
+            else{
+                fetch(localStorage.getItem('prefix') + '/vocabularies/' + response['currVocab'] + '/', {
+                    method: 'GET',
+                    headers: withAuthHeader(),
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (response) {
+                    self.setState({vocab: response});
+                    console.log(response);
+                });
+            }
         });
     }
 
@@ -186,3 +192,4 @@ ScrollableTabs.propTypes = {
 };
 
 export default withStyles(styles)(ScrollableTabs);
+
