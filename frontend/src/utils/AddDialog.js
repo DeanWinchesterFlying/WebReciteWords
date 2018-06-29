@@ -65,6 +65,7 @@ class AddDialog extends React.Component {
             }).then(function (response) {
                 console.log(response);
                 self.setState({addVocab: false});
+                self.getMyVocabulary();
             });
         }
     }
@@ -98,7 +99,7 @@ class AddDialog extends React.Component {
                         取消
                     </Button>
                     <Button onClick={this.handleVocab} color="primary">
-                        注册
+                        添加
                     </Button>
                 </DialogActions>
             </Dialog>);
@@ -126,7 +127,7 @@ class AddDialog extends React.Component {
                             }}>
                                 <ListItemAvatar>
                                     <Avatar>
-                                        <AddIcon />
+                                        <AddIcon color='action'/>
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText primary="创建新的词库" />

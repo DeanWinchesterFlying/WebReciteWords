@@ -52,7 +52,6 @@ class ProgressContainer extends Component{
                         },
                         splitLine: {
                             lineStyle: {
-                                show: true,
                                 color: '#E0E0E0',
                                 type: 'dashed',
                             }
@@ -108,6 +107,7 @@ class ProgressContainer extends Component{
                     grid: {
                         y: 15,
                     },
+                    tooltip: {},
                     legend: {
                         data:['单词统计']
                     },
@@ -127,7 +127,6 @@ class ProgressContainer extends Component{
                         },
                         splitLine: {
                             lineStyle: {
-                                show: true,
                                 color: '#E0E0E0',
                                 type: 'dashed',
                             }
@@ -147,7 +146,6 @@ class ProgressContainer extends Component{
                         },
                         splitLine: {
                             lineStyle: {
-                                show: true,
                                 color: '#E0E0E0',
                                 type: 'dashed',
                             }
@@ -161,11 +159,9 @@ class ProgressContainer extends Component{
                         )),
                         itemStyle: {
                             normal: {
-                                lineBorderColor: '#bfe497',
-                                color: '#bfe497'
+                                color: '#bfe497',
                             },
                             emphasis: {
-                                lineBorderColor: '#bfe497',
                                 color: '#bfe497'
                             }
                         },
@@ -221,10 +217,8 @@ class ProgressContainer extends Component{
                         <div className="chart-body" id="chartProgress">
                             {
                                 data2 && <ReactEcharts
-                                    showLoading={true}
                                     option={data2}
                                     style={{height: '240px', width:'480px'}}
-                                    opts={{ renderer: 'svg' }}
                                     className='react_for_echarts' />
                             }
                         </div>
